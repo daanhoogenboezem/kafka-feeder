@@ -18,10 +18,9 @@ object KafkaFeeder {
 
     // Loop through json files in directory
     new File(githubDataDirectory).listFiles().toSeq.foreach{ file =>
-      println(s"Processing file ${file.getName}")
+      println(s"Processing file '${file.getName}', pushing events to topic '$topic'")
       // Process them line by line. Each line corresponds to a single event
       for (line <- Source.fromFile(file, "utf-8").getLines()) {
-        println(s"Pushing event to topic '$topic'")
         // Construct record and feed it into kafka.
         val event = new ProducerRecord[String, String](topic, null, line)
         producer.send(event)

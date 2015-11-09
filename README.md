@@ -2,22 +2,24 @@
 - Download the most recent kafka distribution (0.8.8.2)
 - Extract the tar file somewhere convenient :
 	- tar zxf kafka_2.10-0.8.2.0.tgz
-- Step into the directory you extracted kafka in
+- Step into directory 'kafka_2.10-0.8.2.0'
 - Start a zookeeper instance :
 	- bin/zookeeper-server-start.sh config/zookeeper.properties
-- Start the first kafka broker in the cluster :
+- Open a new terminal and start the first kafka broker in the cluster :
 	- bin/kafka-server-start.sh config/server.properties
-- Make a copy of the configuration file for the second kafka broker in the cluster :
+- Open a new terminal window and make a copy of the configuration file for the second kafka broker in the cluster :
 	- cp config/server.properties config/server-1.properties
-- Adjust the configuration for the second kafka broker to avoid brokerId, portNumber and logfile clashes
-	- Change 'broker.id' to 1, 'port' to 9093, 'log.dir' to '/tmp/kafka-logs-1' in config/server-1.properties
-- Adjust the configuration for the third kafka broker to avoid brokerId, portNumber and logfile clashes
-	- Change 'broker.id' to 2, 'port' to 9094, 'log.dir' to '/tmp/kafka-logs-2' in config/server-2.properties
+- Adjust the configuration for the second broker to avoid brokerId, portNumber and logfile clashes.
+	- Change 'broker.id' to 1, 'port' to 9093, 'log.dir' to '/tmp/kafka-logs-1' in config/server-1.properties	
 - Start the second kafka broker in the cluster:
 	- bin/kafka-server-start.sh config/server-1.properties
+- Open a new terminal window and make a copy of the configuration file for the second kafka broker in the cluster
+	- cp config/server.properties config/server-2.properties
+- Adjust the configuration for the third broker to avoid brokerId, portNumber and logfile clashes.
+	- Change 'broker.id' to 2, 'port' to 9094, 'log.dir' to '/tmp/kafka-logs-2' in config/server-2.properties
 - Start the third kafka broker in the cluster:
 	- bin/kafka-server-start.sh config/server-2.properties
-- Create a new 'github' topic, that will be used by producers and consumers of github events:
+- Open a new terminal window and create a new 'github' topic, that will be used by producers and consumers of github events:
 	- bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic github
 - Verify that the topic was created succesfully
 	- bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic github
@@ -46,10 +48,9 @@
 	- run "localhost:9092,localhost:9093,localhost:9094" "github" "/path/to/githubdata" "10000"
 - You should be seeing output along the lines of :
 
-      Processing file 2015-01-01-0.json
-      Pushing event to topic 'github'
-      Pushing event to topic 'github'
-      ...      
+		Processing file '2015-01-01-0.json', pushing events to topic 'github'
+		Processed file 2015-01-01-0.json, sleeping for 10000 milliseconds
+		...      
 
 # Consume event stream
 - Step into the kafka directory
